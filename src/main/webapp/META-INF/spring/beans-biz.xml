@@ -10,7 +10,7 @@
     <context:component-scan base-package="com.skplanet.biz.service"/>
 
 
-
+    <!--<bean class="com.skplanet.biz.service.MockCustomerService"></bean>-->
 
 
 

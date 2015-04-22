@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
     <title>고객 목록 화면</title>
@@ -17,20 +17,24 @@
 
     <table border="1">
       <tr>
-        <td>ID</td>
-        <td>name</td>
-        <td>pwd</td>
-        <td>email</td>
-        <td>phone</td>
+        <th>ID</th>
+        <th>이름</th>
+        <th>주소</th>
+        <th>이메일 주소</th>
+        <td></td>
       </tr>
-
       <c:forEach items="${customers}" var="customer">
         <tr>
-          <td><c:out value="${customer.id}"></c:out></td>
-          <td><c:out value="${customer.name}"></c:out></td>
-          <td><c:out value="${customer.pwd}"></c:out></td>
-          <td><c:out value="${customer.email}"></c:out></td>
-          <td><c:out value="${customer.phone}"></c:out></td>
+          <td><c:out value="${customer.id}"/></td>
+          <td><c:out value="${customer.name}"/></td>
+          <td><c:out value="${customer.address}"/></td>
+          <td><c:out value="${customer.emailAddress}"/></td>
+          <td>
+            <c:url value="/customer/${customer.id}" var="url"/>
+            <a href="${url}">상세</a>
+            <c:url value="/customer/${customer.id}/edit" var="url"/>
+            <a href="${url}">편집</a>
+          </td>
         </tr>
       </c:forEach>
     </table>
