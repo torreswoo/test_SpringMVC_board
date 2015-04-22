@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -89,6 +90,17 @@ public class CustomerEditController {
         sessionStatus.setComplete();
 
         return "customer/edit/edited";
+    }
+
+    // Spring MVC에서의 예외처리!  @ExceptionHandler
+    @ExceptionHandler
+    public String handleException(HttpSessionRequiredException e) {
+        return "redirect:/customer/{customerId}/edit";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handleException() {
+        return "customer/notfound";
     }
 
 }
