@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -17,28 +18,40 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/customer/{customerId}")
-@SessionAttributes("editCustomer")
+@SessionAttributes("editCustomer") //세션 스코프로 입력값을 관리
 public class CustomerEditController {
 
     @Autowired
     private CustomerService customerService;
 
     @RequestMapping(value="/edit", method=RequestMethod.GET)
-    public String redirectToEntryForm( @PathVariable int customerId, Model model)throws Exception{
+    public String redirectToEntryForm(
+            @PathVariable int customerId, Model model)throws Exception{
         Customer customer = customerService.findById(customerId);
         model.addAttribute("editCustomer", customer); // 세션관리가된 editCustomer를
         return "redirect:enter";
     }
 
     @RequestMapping(value = "/enter", method= RequestMethod.GET)
-    public String showEntryForm(){
+    public String showEntryForm(
+            @ModelAttribute("editCustomer") Customer customer) {
         return "customer/edit/enter";
     }
 
 
-    // _event_proceed 이벤트드리븐방식  (params), 유효성검사(@Valid)
+
+    @RequestMapping(value = "/review", method = RequestMethod.GET)
+    public String showReview(@ModelAttribute("editCustomer") Customer customer) {
+        return "customer/edit/review";
+    }
+    // _event_proceed 이벤트드리븐방식  (params)
+    // _event_revise
+    // _event_confirmed
+
+    // 유효성검사(@Valid)
     @RequestMapping(value = "/enter", params = "_event_proceed", method = RequestMethod.POST)
-    public String verifiy(@Valid @ModelAttribute("editCustomer") Customer customer, Errors errors){
+    public String verifiy(
+            @Valid @ModelAttribute("editCustomer") Customer customer, Errors errors){
 
         if(errors.hasErrors()){
             return "customer/edit/enter";
@@ -46,22 +59,33 @@ public class CustomerEditController {
         return "redirect:review";
     }
 
-    @RequestMapping(value = "/review", method= RequestMethod.GET)
-    public String showReview(){
-        return "customer/edit/review";
+    @RequestMapping(value = "/review", params = "_event_revise", method = RequestMethod.POST)
+    public String revise() {
+        return "redirect:enter";
     }
 
-
-    // _event_confirmed 이벤트드리븐방식  (params), 유효성검사(@Valid)
     @RequestMapping(value = "/review", params = "_event_confirmed", method = RequestMethod.POST)
-    public String verifiy(@Valid @ModelAttribute("editCustomer") Customer customer)throws Exception{
+    public String edit(@ModelAttribute("editCustomer") Customer customer,
+                       RedirectAttributes redirectAttributes, SessionStatus sessionStatus)
+            throws Exception {
         customerService.update(customer);
-        return "redirect:edited";
+
+        // retrun "redirect:edited";
+
+        redirectAttributes.addFlashAttribute("editedCustomer", customer);
+
+        sessionStatus.setComplete();
+
+        return "redirect:/customer";
     }
 
     @RequestMapping(value = "/edited", method = RequestMethod.GET)
-    public String showEdited(SessionStatus sessionStatus){
-        sessionStatus.setComplete();  // 세션의 만료
+    public String showEdited(
+            @ModelAttribute("editCustomer") Customer customer,
+            SessionStatus sessionStatus) {
+
+        sessionStatus.setComplete();
+
         return "customer/edit/edited";
     }
 

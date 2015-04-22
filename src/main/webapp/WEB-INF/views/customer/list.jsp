@@ -11,6 +11,7 @@
 <h1>고객 목록 화면</h1>
 
 
+
 <c:if test="${editedCustomer != null}">
   아래 고객이 갱신되었습니다.
   <dl>
