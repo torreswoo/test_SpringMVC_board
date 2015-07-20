@@ -44,7 +44,4 @@ public class CustomerListController {
         return "customer/detail";
     }
 
-
-
-
 }

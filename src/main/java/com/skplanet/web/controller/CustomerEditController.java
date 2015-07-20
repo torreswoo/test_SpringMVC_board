@@ -31,7 +31,8 @@ public class CustomerEditController {
     // 1단계 : edit
     @RequestMapping(value="/edit", method=RequestMethod.GET)
     public String redirectToEntryForm(
-            @PathVariable int customerId, Model model)throws Exception{
+            @PathVariable int customerId, Model model) throws Exception{
+
         Customer customer = customerService.findById(customerId);
         model.addAttribute("editCustomer", customer); // 세션관리가된 editCustomer를
         return "redirect:enter";
@@ -41,6 +42,7 @@ public class CustomerEditController {
     @RequestMapping(value = "/enter", method= RequestMethod.GET)
     public String showEntryForm(
             @ModelAttribute("editCustomer") Customer customer) {
+
         return "customer/edit/enter";
     }
                                     // _event_proceed 이벤트드리븐방식
@@ -57,7 +59,9 @@ public class CustomerEditController {
 
     // 3단계 : review
     @RequestMapping(value = "/review", method = RequestMethod.GET)
-    public String showReview(@ModelAttribute("editCustomer") Customer customer) {
+    public String showReview(
+            @ModelAttribute("editCustomer") Customer customer) {
+
         return "customer/edit/review";
     }
                                     // _event_revise
@@ -67,9 +71,10 @@ public class CustomerEditController {
     }
                                     // _event_confirmed
     @RequestMapping(value = "/review", params = "_event_confirmed", method = RequestMethod.POST)
-    public String edit(@ModelAttribute("editCustomer") Customer customer,
-                       RedirectAttributes redirectAttributes, SessionStatus sessionStatus)
+    public String edit(
+            @ModelAttribute("editCustomer") Customer customer, RedirectAttributes redirectAttributes, SessionStatus sessionStatus)
             throws Exception {
+
         customerService.update(customer);
 
         // retrun "redirect:edited";
@@ -84,8 +89,7 @@ public class CustomerEditController {
     // 4단계 : edited
     @RequestMapping(value = "/edited", method = RequestMethod.GET)
     public String showEdited(
-            @ModelAttribute("editCustomer") Customer customer,
-            SessionStatus sessionStatus) {
+            @ModelAttribute("editCustomer") Customer customer, SessionStatus sessionStatus) {
 
         sessionStatus.setComplete();
 
