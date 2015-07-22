@@ -6,16 +6,7 @@
 
 	<display-name>Spring MVC Application</display-name>
 
-	<!--<context-param>-->
-		<!--<param-name>contextConfigLocation</param-name>-->
-		<!--<param-value>-->
-			<!--META-INF/spring/beans-biz.xml-->
-		<!--</param-value>-->
-	<!--</context-param>-->
 
-	<!--<listener>-->
-		<!--<listener-class></listener-class>-->
-	<!--</listener>-->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
@@ -30,7 +21,7 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-				META-INF/spring/beans-webmvc.xml
+				/META-INF/spring/beans-webmvc.xml
 			</param-value>
 		</init-param>
 
@@ -40,4 +31,5 @@
 		<servlet-name>mvc-dispatcher</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+
 </web-app>
